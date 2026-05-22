@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-REPO="Justinshen23/uc-berkeley-wifi-monitor"
+REPO="Justinshen23/Berkeley-Campus-wifi-heatmap-dashboard"
 REMOTE="github"
 
 if ! git remote get-url "$REMOTE" >/dev/null 2>&1; then
@@ -19,7 +19,7 @@ echo "=========================================="
 echo ""
 echo "  Open: https://github.com/new"
 echo "  Owner: Justinshen23"
-echo "  Name:  uc-berkeley-wifi-monitor"
+echo "  Name:  Berkeley-Campus-wifi-heatmap-dashboard"
 echo "  Visibility: Public"
 echo ""
 echo "  IMPORTANT: Leave all checkboxes UNCHECKED"
