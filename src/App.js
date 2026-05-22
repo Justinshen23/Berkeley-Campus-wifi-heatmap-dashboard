@@ -14,7 +14,10 @@ function App() {
       <header className="App-header">
         <h3>Welcome to the WiFi Heatmap Display Project!</h3>
 
-        <Mapper refreshKey={refreshKey} />
+        <div className="map-wrapper">
+          <Mapper refreshKey={refreshKey} />
+        </div>
+
         <Search onDataChange={handleDataChange} />
       </header>
     </div>

@@ -1,6 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FormControl, InputLabel, Select, MenuItem, Button, Typography } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Typography,
+} from "@mui/material";
 import { API_URL, fetchAverages } from "../../utils/averages";
+import { CAMPUS_LOCATIONS } from "../../data/campusLocations";
 
 function Form({ onDataChange }) {
   const [value, setValue] = useState("");
@@ -61,16 +69,19 @@ function Form({ onDataChange }) {
         color: "black",
         backgroundColor: "white",
         padding: "20px",
+        width: "90%",
+        maxWidth: 960,
         display: "flex",
         flexDirection: "column",
         gap: "20px",
         textAlign: "left",
+        borderRadius: "8px",
       }}
     >
       <div style={{ display: "flex", flexDirection: "row", gap: "40px", flexWrap: "wrap" }}>
         <div>
           <p>Where are you located?</p>
-          <FormControl sx={{ minWidth: 200 }}>
+          <FormControl sx={{ minWidth: 220 }}>
             <InputLabel id="location-label">Location</InputLabel>
             <Select
               labelId="location-label"
@@ -78,10 +89,11 @@ function Form({ onDataChange }) {
               value={value}
               onChange={(e) => setValue(e.target.value)}
             >
-              <MenuItem value="East Asian Library">East Asian Library</MenuItem>
-              <MenuItem value="Music Library">Music Library</MenuItem>
-              <MenuItem value="Doe Library">Doe Library</MenuItem>
-              <MenuItem value="Grimes Hall">Grimes Hall</MenuItem>
+              {CAMPUS_LOCATIONS.map((location) => (
+                <MenuItem key={location.name} value={location.name}>
+                  {location.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           <Button variant="text" onClick={() => setValue("")}>

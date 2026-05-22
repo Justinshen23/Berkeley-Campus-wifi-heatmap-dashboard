@@ -2,28 +2,20 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadowPng from "leaflet/dist/images/marker-shadow.png";
 import { fetchAverages } from "../../utils/averages";
+import { CAMPUS_LOCATIONS } from "../../data/campusLocations";
 
-L.Icon.Default.mergeOptions({
+const defaultMarkerIcon = L.icon({
   iconUrl: markerIconPng,
+  iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadowPng,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
 });
-
-const x = L.divIcon({
-  html: '<span style="font-size: 2rem;">💩</span>',
-  iconSize: [30, 30],
-  iconAnchor: [15, 15],
-  popupAnchor: [0, -15],
-  className: "",
-});
-
-const LIBRARIES = [
-  { name: "East Asian Library", coords: [37.8736, -122.26] },
-  { name: "Music Library", coords: [37.8704, -122.2562] },
-  { name: "Doe Library", coords: [37.8722, -122.2592] },
-  { name: "Grimes Hall", coords: [37.8753, -122.2576] },
-];
 
 export default function Mapper({ refreshKey }) {
   const [averages, setAverages] = useState({});
@@ -36,20 +28,27 @@ export default function Mapper({ refreshKey }) {
 
   return (
     <MapContainer
-      center={[37.8712, -122.2555]}
-      zoom={17}
+      center={[37.8725, -122.257]}
+      zoom={16}
       scrollWheelZoom={true}
-      style={{ height: "700px", width: "50%" }}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {LIBRARIES.map((lib) => (
-        <Marker key={lib.name} position={lib.coords} icon={x}>
+      {CAMPUS_LOCATIONS.map((location) => (
+        <Marker
+          key={location.name}
+          position={location.coords}
+          icon={defaultMarkerIcon}
+        >
           <Popup>
-            {lib.name}:{" "}
-            {averages[lib.name] ? `${averages[lib.name]} / 5` : "No ratings yet"}
+            <strong>{location.name}</strong>
+            <br />
+            {averages[location.name]
+              ? `Average: ${averages[location.name]} / 5`
+              : "No ratings yet"}
           </Popup>
         </Marker>
       ))}
