@@ -17,7 +17,7 @@ To setup the backend system, follow these steps:
 3. Run <code>node -v</code> to check your <code>node</code> version. If you don't have it installed, [install the right version here](https://nodejs.org/en/download).
 4. Run <code>npm install</code> to install all dependencies. This may take a while.
 5. Run <code>npm start</code> to boot up the API server. Pay attention to the terminal message and the port the server is listening on. 
-6. <code>Ctrl/Command + T</code> to open a new terminal and run <code>node test.js</code>.
+6. Run <code>npm test</code> in the backend folder to run the 20-point security checklist. Then <code>Ctrl/Command + T</code> to open a new terminal and run <code>node test.js</code> against a running server.
 7. If all tests are passing, congratulations! Your backend system is now operational and ready for connection. 
 
 ## Database Schema 
@@ -35,13 +35,13 @@ When surveying the campus population, we have observed that most participants pr
 
     POST http://localhost:PORT/add-user
 
-Add a new user submission to the database.
+Add a new user submission to the database. `location` must be a known campus site and `rating` must be an integer from 1 to 5.
 
 <details>
 <summary>Payload Structure</summary>
 <code>
     {
-        location: "Dwinelle",
+        location: "Doe Library",
         rating: 3
     }
 </code>
@@ -57,6 +57,8 @@ A success status if no error occurs.
 
 Get all user submissions from the database.
 
+Public responses include only <code>location</code> and <code>rating</code> (no row ids). Send the admin secret header to include ids for maintenance.
+
 <details>
 <summary>Response</summary>
 <code>
@@ -69,11 +71,16 @@ Get all user submissions from the database.
 
     DELETE http://localhost:PORT/delete-user/?id=#
 
-Delete a user submission with a specific ID.
+Delete a user submission with a specific ID. Requires the `X-Admin-Secret` header to match `ADMIN_SECRET` from `.env`.
 
 <details>
 <Summary>Query Parameters</Summary>
 Replace <code>#</code> with the desired user ID.
+</details>
+
+<details>
+<summary>Headers</summary>
+<code>X-Admin-Secret: your-admin-secret</code>
 </details>
 
 ## General Advice
