@@ -1,36 +1,59 @@
-const sqlite3 = require('sqlite3').verbose();
-let sql;
+const { Pool } = require("pg");
 
-const db = new sqlite3.Database('./heatmap_data.db', sqlite3.OPEN_READWRITE);
 
-function addUser(user) {
-    sql = `INSERT INTO users(location, rating) VALUES (?,?)`;
-    db.run(sql, [user.location, user.rating], err => {
-        if (err) return err.message;
-    });
-    return {success: true};
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+
+async function initializeDatabase() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      location VARCHAR(100) NOT NULL,
+      rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5)
+    )
+  `);
 }
 
-function deleteUser(id) {
-    sql = `DELETE FROM users WHERE id=?`;
-    db.run(sql, [id], err => {
-        if (err) return err.message;
-    });
-    return {success: true};
+
+async function addUser(user) {
+  const result = await pool.query(
+    `INSERT INTO users (location, rating)
+     VALUES ($1, $2)
+     RETURNING *`,
+    [user.location, user.rating]
+  );
+
+
+  return result.rows[0];
 }
+
+
+async function deleteUser(id) {
+  await pool.query(
+    "DELETE FROM users WHERE id = $1",
+    [id]
+  );
+
+
+  return { success: true };
+}
+
 
 async function getAllUsers() {
-    sql = `SELECT * FROM users`;
-    return new Promise((resolve, reject) => {
-        db.all(sql, [], (err, rows) => {
-            if (err) reject(err.message);
-            resolve(rows);
-        });
-    })
+  const result = await pool.query(
+    "SELECT * FROM users ORDER BY id DESC"
+  );
+
+
+  return result.rows;
 }
 
+
 module.exports = {
-    addUser,
-    deleteUser,
-    getAllUsers,
+  initializeDatabase,
+  addUser,
+  deleteUser,
+  getAllUsers,
 };
