@@ -1,17 +1,31 @@
 # UC Berkeley WiFi Monitor
 
-Full-stack dashboard for reporting and visualizing WiFi signal quality across campus. Users submit location and rating data; the app aggregates scores per location and displays them on an interactive map.
+Full-stack dashboard for reporting and visualizing WiFi signal quality across campus. Users submit a location and rating; the app averages scores per site and shows them on an interactive map.
 
-Built for **PlexTech** · React · Express · SQLite
+**Live app:** [berkeley-campus-wifi-heatmap-dashboard-git-main-justin-aa14.vercel.app](https://berkeley-campus-wifi-heatmap-dashboard-git-main-justin-aa14.vercel.app/)
+
+Built for **PlexTech** · React · Express · PostgreSQL
+
+---
+
+## Deployed on
+
+| Layer | Host |
+|-------|------|
+| Frontend | [Vercel](https://berkeley-campus-wifi-heatmap-dashboard-git-main-justin-aa14.vercel.app/) |
+| Backend API | Render |
+| Database | Neon (PostgreSQL) |
+
+The frontend reads the API URL from `REACT_APP_API_URL` at build time. Secrets such as `DATABASE_URL` stay in the host dashboard, not in this repo.
 
 ---
 
 ## Features
 
 - **User submissions** — location dropdown + signal strength rating
-- **REST API backend** — store, retrieve, and delete submissions
-- **Aggregated scores** — average WiFi rating computed per campus location
-- **Interactive map** — Leaflet map with markers and popups (OpenStreetMap tiles)
+- **REST API** — store, retrieve, and delete submissions
+- **Aggregated scores** — average WiFi rating per campus location
+- **Interactive map** — Leaflet markers and popups (OpenStreetMap tiles)
 - **Material UI** — form controls and layout
 
 ---
@@ -21,43 +35,8 @@ Built for **PlexTech** · React · Express · SQLite
 | Layer | Technologies |
 |-------|----------------|
 | Frontend | React 18, Material UI, React-Leaflet |
-| Backend | Node.js, Express, SQLite3 |
+| Backend | Node.js, Express, PostgreSQL (`pg`) |
 | API | `POST /add-user`, `GET /get-users`, `DELETE /delete-user` |
-
----
-
-## Quick start (localhost)
-
-You need **two terminals**.
-
-### Terminal 1 — Backend (port 2024)
-
-```bash
-cd backend
-cp .env.example .env   # first time only
-npm install
-npm start
-```
-
-### Terminal 2 — Frontend (port 3000)
-
-```bash
-npm install
-npm start
-```
-
-Open **http://localhost:3000**
-
-| Service | URL |
-|---------|-----|
-| Frontend | http://localhost:3000 |
-| Backend API | http://localhost:2024 |
-
-### Verify the API
-
-```bash
-curl http://localhost:2024/get-users
-```
 
 ---
 
@@ -71,8 +50,7 @@ curl http://localhost:2024/get-users
 │       └── Map/           # Leaflet campus map
 ├── backend/
 │   ├── server.js          # Express API
-│   ├── handler.js         # SQLite queries
-│   └── heatmap_data.db    # local database
+│   └── handler.js         # PostgreSQL queries
 └── package.json
 ```
 
